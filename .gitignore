@@ -1,0 +1,9 @@
+# 환경 변수 파일
+.env
+
+# PyCharm 관련 파일
+.idea/
+
+# Python 캐시 파일
+__pycache__/
+*.pyc
