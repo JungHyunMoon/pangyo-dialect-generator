@@ -6,6 +6,7 @@ from langchain_core.output_parsers import StrOutputParser
 import uvicorn
 
 from dotenv import load_dotenv
+from starlette.responses import RedirectResponse
 
 load_dotenv()
 
@@ -97,7 +98,12 @@ app.add_middleware(
 
 
 # Static files를 서빙하도록 설정
-app.mount("/home", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/static", StaticFiles(directory="frontend", html=True), name="frontend")
+
+
+@app.get("/")
+def redirect_to_static():
+    return RedirectResponse(url="/static")
 
 
 @app.post("/convert")
