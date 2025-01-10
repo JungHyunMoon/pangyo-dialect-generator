@@ -98,7 +98,7 @@ app.add_middleware(
 
 
 # Static files를 서빙하도록 설정
-app.mount("/static", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/static", StaticFiles(directory=".", html=True), name="frontend")
 
 
 @app.get("/")
