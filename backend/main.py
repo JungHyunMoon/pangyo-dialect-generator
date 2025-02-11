@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request
 from langchain.prompts import ChatPromptTemplate
-from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 import uvicorn
@@ -13,7 +12,6 @@ load_dotenv()
 def get_llm():
     """LLM 초기화 함수"""
     return ChatOpenAI(model="gpt-4o-mini")
-
 
 
 def get_pangyo_chain():
@@ -78,7 +76,9 @@ def get_pangyo_chain():
         출력:
     """)
 
-    return LLMChain(llm=llm, prompt=prompt, output_parser=StrOutputParser())
+    dictionary_chain = prompt | llm | StrOutputParser()
+
+    return dictionary_chain
 
 
 app = FastAPI()
@@ -91,19 +91,14 @@ from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 모든 도메인 허용 (필요에 따라 제한 가능)
-    allow_credentials=False,  # 쿠키 허용 여부
+    allow_credentials=False,  # 쿠키 허용
     allow_methods=["*"],  # 모든 메서드 허용
     allow_headers=["*"],  # 모든 헤더 허용
 )
 
 
 # Static files를 서빙하도록 설정
-app.mount("/static", StaticFiles(directory=".", html=True), name="frontend")
-
-
-@app.get("/")
-def redirect_to_static():
-    return RedirectResponse(url="/static")
+app.mount("/home", StaticFiles(directory="frontend", html=True), name="frontend")
 
 
 @app.post("/convert")
@@ -112,9 +107,9 @@ async def convert(request: Request):
     print("요청 데이터:", data)  # 디버깅용 출력
 
     input_text = data.get("input_text")
-    result = pangyo_chain.run({"question": input_text})
+    result = pangyo_chain.invoke({"question": input_text})
     return {"output_text": result}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
