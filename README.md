@@ -18,13 +18,20 @@ venv\Scripts\activate    # Windows
 pip install -r requirements.txt
 ```
 
-### 3. 서버 실행
+### 3. 환경 변수 설정
+`.env` 파일을 생성하고 다음 내용을 추가하세요.
+```env
+OPENAI_API_KEY=your_openai_api_key
+```
+이 API 키가 없으면 OpenAI 관련 기능이 동작하지 않습니다.
+
+### 4. 서버 실행
 아래 명령어로 FastAPI 서버를 실행할 수 있습니다.
 ```bash
 uvicorn backend.main:app --port 8080
 ```
 
-### 4. API 접근 경로
+### 5. API 접근 경로
 | 기능 | 경로 |
 |------|------|
 | 홈 경로 | [http://localhost:8080/home](http://localhost:8080/home) |
@@ -63,5 +70,3 @@ frontend/
   ```bash
   uvicorn backend.main:app --port 8080 --reload
   ```
-- `.env` 파일을 사용하여 API 키 등의 환경 변수를 관리할 수 있습니다.
-
